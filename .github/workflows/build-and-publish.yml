@@ -72,6 +72,18 @@ jobs:
           repo/build-repo.sh ./debs ./public noble "$APT_GPG_KEY_ID" "amd64 arm64"
           repo/build-repo.sh ./debs ./public resolute "$APT_GPG_KEY_ID" "amd64 arm64"
 
+      - name: Verify APT paths
+        run: |
+          for packages in public/dists/*/main/binary-*/Packages; do
+            awk -F': ' \
+              '$1 == "Filename" && $2 !~ /^pool\/main\/[^/]+\.deb$/ { print FILENAME ": " $0; bad = 1 } END { exit bad }' \
+              "$packages"
+          done
+          if grep -R -E '(^|/)(public/|\.\./|/home/)' public/dists; then
+            echo 'APT metadata contains a local/staging path' >&2
+            exit 1
+          fi
+
       - name: Prepare installer
         env:
           APT_GPG_KEY_ID: ${{ secrets.APT_GPG_KEY_ID }}

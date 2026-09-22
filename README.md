@@ -144,7 +144,7 @@ sudo apt install firefox
 
 ## Tạo APT repository
 
-`repo/build-repo.sh` tạo các index `binary-ARCH`, `Release` và chữ ký `InRelease`/`Release.gpg`. Script sẽ dừng nếu thiếu `.deb` hoặc secret GPG key. Ví dụ cho amd64 và arm64:
+`repo/build-repo.sh` tạo các index `binary-ARCH`, `Release` và chữ ký `InRelease`/`Release.gpg`. Metadata dùng đường dẫn tương đối `pool/main/...`, nên hoạt động đúng khi thư mục output được deploy trực tiếp lên GitHub Pages. Script sẽ dừng nếu thiếu `.deb` hoặc secret GPG key. Ví dụ cho amd64 và arm64:
 
 ```sh
 repo/build-repo.sh ./debs ./public noble "$GPG_KEY_ID" "amd64 arm64"

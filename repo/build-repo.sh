@@ -38,7 +38,12 @@ find "$PACKAGE_DIR" -maxdepth 1 -type f -name '*.deb' -exec cp -f {} "$OUTPUT_DI
 # shellcheck disable=SC2086
 for arch in $ARCHES; do
     mkdir -p "$OUTPUT_DIR/dists/$CODENAME/main/binary-$arch"
-    apt-ftparchive packages "$OUTPUT_DIR/pool/main" > "$OUTPUT_DIR/dists/$CODENAME/main/binary-$arch/Packages"
+    # Run from the repository root so Packages contains Filename: pool/main/...
+    # rather than the local staging path (for example ./public/pool/main/...).
+    (
+        cd "$OUTPUT_DIR"
+        apt-ftparchive packages pool/main > "dists/$CODENAME/main/binary-$arch/Packages"
+    )
     gzip -n -9 -c "$OUTPUT_DIR/dists/$CODENAME/main/binary-$arch/Packages" > "$OUTPUT_DIR/dists/$CODENAME/main/binary-$arch/Packages.gz"
 done
 
