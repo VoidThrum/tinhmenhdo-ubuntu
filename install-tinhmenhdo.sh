@@ -35,6 +35,8 @@ if [ ! -r /etc/os-release ]; then
     echo "Cannot identify the operating system" >&2
     exit 1
 fi
+# /etc/os-release is a runtime-provided file on Ubuntu, not part of this repo.
+# shellcheck source=/dev/null
 . /etc/os-release
 
 for command_name in curl gpg apt-get awk install mktemp; do
