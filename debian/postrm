@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+
+# Do not remove the Flathub remote on package removal: it may be used by the
+# administrator for other Flatpak applications. Removal is explicit and safe.
+exit 0

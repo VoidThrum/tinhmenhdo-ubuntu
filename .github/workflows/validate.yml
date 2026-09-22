@@ -1,0 +1,30 @@
+name: Validate package
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install packaging tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes build-essential debhelper devscripts dpkg-dev apt-utils gnupg shellcheck
+      - name: Check shell scripts
+        run: |
+          sh -n install-tinhmenhdo.sh repo/build-repo.sh debian/postinst debian/postrm debian/rules
+          shellcheck install-tinhmenhdo.sh repo/build-repo.sh debian/postinst debian/postrm
+      - name: Build Debian package
+        run: dpkg-buildpackage -us -uc -b
+      - name: Inspect package
+        run: |
+          deb=$(find .. -maxdepth 1 -name 'tinhmenhdo-ubuntu_*.deb' -print -quit)
+          test -n "$deb"
+          dpkg-deb --info "$deb"
+          dpkg-deb --contents "$deb"

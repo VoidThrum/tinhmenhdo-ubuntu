@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+
+if [ "$1" = configure ] && command -v flatpak >/dev/null 2>&1; then
+    # Network failure must not leave dpkg half-configured. A later explicit
+    # `flatpak remote-add` can complete this optional integration.
+    timeout 30s flatpak remote-add --system --if-not-exists flathub \
+        https://dl.flathub.org/repo/flathub.flatpakrepo >/dev/null 2>&1 || true
+fi
+
+exit 0

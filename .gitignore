@@ -1,0 +1,47 @@
+# Debian packaging/build artifacts
+*.deb
+*.changes
+*.build
+*.buildinfo
+*.dsc
+*.tar.gz
+*.tar.xz
+*.tar.bz2
+debian/files
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/tinhmenhdo-ubuntu/
+
+# Locally generated APT repository and package staging directories
+/public/
+/debs/
+/build/
+/dist/
+
+# GPG/private signing material and local credentials
+*.gpg
+*.kbx
+*.key
+*.asc
+private-keys-v1.d/
+secring.gpg
+trustdb.gpg
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.code-workspace
+.DS_Store
+Thumbs.db
+
+# Local test output
+.pytest_cache/
+coverage/
