@@ -1,3 +1,10 @@
+tinhmenhdo-ubuntu (1.0.1) noble; urgency=medium
+
+  * Keep Ubuntu wallpaper dependency required by GNOME Shell.
+  * Document safe cleanup and avoid removing the desktop dependency chain.
+
+ -- TinhMenhDo Ubuntu maintainers <vuquyettam@gmail.com>  Wed, 23 Sep 2026 16:00:00 +0700
+
 tinhmenhdo-ubuntu (1.0.0) noble; urgency=medium
 
   * Initial TinhMenhDo Ubuntu vanilla GNOME and Flatpak profile.

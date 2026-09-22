@@ -13,7 +13,7 @@ Không commit private key, thư mục `~/.gnupg` hoặc thư mục `public/` ch�
 - `Conflicts` chỉ làm APT không cho các gói Snap, Ubuntu Dock và Yaru theme tồn tại đồng thời; nó không phải cơ chế purge mọi dữ liệu cũ.
 - Maintainer script không được gọi `apt`, không được tự xóa `/var/lib/snapd`, `/usr/lib/snapd` hoặc thư mục người dùng. Những việc đó dễ làm hỏng trạng thái dpkg và dữ liệu người dùng.
 - Không thêm PPA trong `postinst`. PPA là nguồn bên ngoài, cần được người quản trị chấp thuận và bootstrap riêng.
-- `vanilla-gnome-desktop` đã kéo các thành phần GNOME cần thiết qua dependency/recommendation; gói này khai báo thêm Adwaita và các thành phần quan trọng để việc cài đặt không phụ thuộc vào cấu hình `APT::Install-Recommends`.
+- `vanilla-gnome-desktop` đã kéo các thành phần GNOME cần thiết qua dependency/recommendation; gói này khai báo thêm Adwaita và các thành phần quan trọng để việc cài đặt không phụ thuộc vào cấu hình `APT::Install-Recommends`. `ubuntu-wallpapers` vẫn được giữ vì `gnome-shell` của Ubuntu yêu cầu package này; nó không phải Yaru theme.
 
 ## Build
 
@@ -86,7 +86,7 @@ Mô phỏng không chạy `postinst`; nó chỉ giúp kiểm tra dependency và 
 Nếu chỉ muốn dùng file build mà chưa bật Pages, tải artifact `tinhmenhdo-deb` từ tab **Actions** rồi cài local:
 
 ```sh
-sudo apt install ./tinhmenhdo-ubuntu_1.0.0_all.deb
+sudo apt install ./tinhmenhdo-ubuntu_1.0.1_all.deb
 ```
 
 ### Cài bằng file `.deb` (USB hoặc file local)
@@ -94,14 +94,16 @@ sudo apt install ./tinhmenhdo-ubuntu_1.0.0_all.deb
 Chép file `.deb` đã build sang máy mới, rồi chạy:
 
 ```sh
-sudo apt install ./tinhmenhdo-ubuntu_1.0.0_all.deb
+sudo apt install ./tinhmenhdo-ubuntu_1.0.1_all.deb
 ```
 
-APT sẽ giải quyết xung đột với `snapd`, Ubuntu Dock và Yaru theme; các dependency chưa có trên máy vẫn cần nguồn APT hoạt động. Gói không purge dữ liệu Snap cũ. Theme mặc định của từng user có thể cần đăng xuất/đăng nhập hoặc chọn Adwaita trong GNOME Tweaks. Nếu muốn dọn dữ liệu Snap sau khi đã xác nhận không còn cần rollback:
+APT sẽ giải quyết xung đột với `snapd`, Ubuntu Dock và Yaru theme; các dependency chưa có trên máy vẫn cần nguồn APT hoạt động. Không purge `ubuntu-wallpapers`, vì trên Ubuntu hiện tại `gnome-shell` phụ thuộc vào package này và APT có thể kéo theo việc gỡ toàn bộ desktop. Gói không purge dữ liệu Snap cũ. Theme mặc định của từng user có thể cần đăng xuất/đăng nhập hoặc chọn Adwaita trong GNOME Tweaks. Nếu muốn dọn dữ liệu Snap sau khi đã xác nhận không còn cần rollback:
 
 ```sh
 sudo apt purge snapd
-sudo apt autoremove --purge
+sudo apt autoremove --purge --dry-run
+# Chỉ chạy lệnh thật sau khi đã kiểm tra danh sách package sẽ bị gỡ.
+# sudo apt autoremove --purge
 ```
 
 Kiểm tra các thành phần Ubuntu đã bị loại:
