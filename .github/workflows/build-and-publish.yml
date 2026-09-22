@@ -70,6 +70,7 @@ jobs:
           mkdir -p public
           gpg --batch --armor --export "$APT_GPG_KEY_ID" > public/public.key
           repo/build-repo.sh ./debs ./public noble "$APT_GPG_KEY_ID" "amd64 arm64"
+          repo/build-repo.sh ./debs ./public resolute "$APT_GPG_KEY_ID" "amd64 arm64"
 
       - name: Prepare installer
         env:

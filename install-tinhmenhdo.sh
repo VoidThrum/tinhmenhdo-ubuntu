@@ -65,7 +65,7 @@ if [ "${ID:-}" != ubuntu ]; then
 fi
 
 case "${VERSION_CODENAME:-}" in
-    noble|jammy) CODENAME=$VERSION_CODENAME ;;
+    noble|resolute) CODENAME=$VERSION_CODENAME ;;
     *)
         echo "Unsupported Ubuntu codename: ${VERSION_CODENAME:-unknown}" >&2
         echo "Build and publish a repository for this Ubuntu release first." >&2

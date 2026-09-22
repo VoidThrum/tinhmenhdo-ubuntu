@@ -65,7 +65,7 @@ chmod 700 /tmp/install-tinhmenhdo.sh
 sudo /tmp/install-tinhmenhdo.sh
 ```
 
-Script kiểm tra Ubuntu codename, xác minh fingerprint key, cài keyring, thêm APT source có `Signed-By`, chạy `apt-get update`, rồi cài metapackage. Workflow hiện publish metadata cho Ubuntu 24.04 `noble`; không chạy trên `jammy` hoặc release khác cho đến khi có metadata tương ứng.
+Script kiểm tra Ubuntu codename, xác minh fingerprint key, cài keyring, thêm APT source có `Signed-By`, chạy `apt-get update`, rồi cài metapackage. Workflow hiện publish metadata cho Ubuntu 24.04 `noble` và Ubuntu 26.04 `resolute`; không chạy trên `jammy` hoặc release khác cho đến khi có metadata tương ứng.
 
 Installer sẽ khiến APT gỡ các package xung đột sau đây nếu chúng đang có mặt:
 
@@ -175,4 +175,4 @@ Không đẩy thư mục chứa private GPG key, file `~/.gnupg`, hoặc một `
 
 ## Phạm vi hỗ trợ
 
-Bản đầu nhắm Ubuntu 24.04 `noble` và Ubuntu 22.04 `jammy`, kiến trúc `amd64` và `arm64`. Cần build/test riêng cho từng Ubuntu release và kiến trúc; không dùng metadata `noble` cho `jammy`.
+Bản đầu nhắm Ubuntu 24.04 `noble` và Ubuntu 26.04 `resolute`, kiến trúc `amd64` và `arm64`. Cần build/test riêng cho từng Ubuntu release và kiến trúc; không dùng metadata `noble` cho `resolute` hoặc release khác.
