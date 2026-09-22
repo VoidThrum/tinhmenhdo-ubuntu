@@ -1,0 +1,90 @@
+name: Build and publish APT repository
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes build-essential debhelper devscripts dpkg-dev apt-utils gnupg
+
+      - name: Build Debian package
+        run: dpkg-buildpackage -us -uc -b
+
+      - name: Upload Debian package
+        uses: actions/upload-artifact@v4
+        with:
+          name: tinhmenhdo-deb
+          path: ../tinhmenhdo-ubuntu_*.deb
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    if: ${{ vars.PUBLISH_APT == 'true' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install repository tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes apt-utils gnupg
+
+      - name: Download Debian package
+        uses: actions/download-artifact@v4
+        with:
+          name: tinhmenhdo-deb
+          path: debs
+
+      - name: Import signing key and build repository
+        env:
+          APT_GPG_PRIVATE_KEY: ${{ secrets.APT_GPG_PRIVATE_KEY }}
+          APT_GPG_KEY_ID: ${{ secrets.APT_GPG_KEY_ID }}
+        run: |
+          export GNUPGHOME="$RUNNER_TEMP/gnupg"
+          install -d -m 700 "$GNUPGHOME"
+          printf '%s\n' "$APT_GPG_PRIVATE_KEY" | gpg --batch --import
+          mkdir -p public
+          gpg --batch --armor --export "$APT_GPG_KEY_ID" > public/public.key
+          repo/build-repo.sh ./debs ./public noble "$APT_GPG_KEY_ID" "amd64 arm64"
+
+      - name: Prepare installer
+        env:
+          APT_GPG_KEY_ID: ${{ secrets.APT_GPG_KEY_ID }}
+        run: |
+          repo_url="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}"
+          cp install-tinhmenhdo.sh public/install-tinhmenhdo.sh
+          sed -i \
+            -e "s|https://YOUR-USER.github.io/tinhmenhdo-ubuntu|$repo_url|" \
+            -e "s|REPLACE_WITH_REPO_KEY_FINGERPRINT|$APT_GPG_KEY_ID|" \
+            public/install-tinhmenhdo.sh
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

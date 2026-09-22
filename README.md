@@ -27,23 +27,36 @@ dpkg-buildpackage -us -uc -b
 
 File `.deb` sẽ nằm ở thư mục cha.
 
-GitHub Actions trong `.github/workflows/validate.yml` tự kiểm tra shell script và build package trên Ubuntu 24.04. Workflow này chỉ validate/build, chưa publish release.
+GitHub Actions trong `.github/workflows/validate.yml` tự kiểm tra shell script và build package trên Ubuntu 24.04. Workflow `.github/workflows/build-and-publish.yml` cũng build package và lưu `.deb` làm artifact sau mỗi push lên `main`.
 
 ## Cài đặt
 
 ### Máy khác, cài online từ APT repository
 
-Sau khi public repo, thay URL/fingerprint key trong `install-tinhmenhdo.sh`, và build metadata đúng codename/kiến trúc, trên máy Ubuntu mới chạy:
+Workflow có thể tự publish APT repository lên GitHub Pages. Để bật bước publish, vào **Settings → Secrets and variables → Actions** và tạo repository variable `PUBLISH_APT=true`, cùng hai repository secrets:
+
+- `APT_GPG_PRIVATE_KEY`: private key ASCII-armored dùng để ký APT Release.
+- `APT_GPG_KEY_ID`: fingerprint đầy đủ của key tương ứng, không có khoảng trắng.
+
+Không dùng key cá nhân; hãy tạo một signing key riêng cho repository. Nếu chưa bật `PUBLISH_APT=true` hoặc chưa tạo hai secret này, workflow vẫn build `.deb` nhưng bước publish Pages sẽ không chạy.
+
+Sau khi workflow publish thành công và GitHub Pages đã bật chế độ **GitHub Actions**, trên máy Ubuntu mới chạy:
 
 ```sh
 curl --fail --silent --show-error --location \
-  https://YOUR-USER.github.io/tinhmenhdo-ubuntu/install-tinhmenhdo.sh \
+  https://<github-user>.github.io/tinhmenhdo-ubuntu/install-tinhmenhdo.sh \
   -o /tmp/install-tinhmenhdo.sh
 chmod 700 /tmp/install-tinhmenhdo.sh
 sudo /tmp/install-tinhmenhdo.sh
 ```
 
-Script kiểm tra Ubuntu codename, xác minh fingerprint key, cài keyring, thêm APT source có `Signed-By`, chạy `apt-get update`, rồi cài metapackage. Mỗi Ubuntu release phải có metadata repo tương ứng (`noble`, `jammy`, ...).
+Script kiểm tra Ubuntu codename, xác minh fingerprint key, cài keyring, thêm APT source có `Signed-By`, chạy `apt-get update`, rồi cài metapackage. Workflow hiện publish metadata cho Ubuntu 24.04 `noble`; cần thêm job build/test riêng trước khi tuyên bố hỗ trợ codename khác.
+
+Nếu chỉ muốn dùng file build mà chưa bật Pages, tải artifact `tinhmenhdo-deb` từ tab **Actions** rồi cài local:
+
+```sh
+sudo apt install ./tinhmenhdo-ubuntu_1.0.0_all.deb
+```
 
 ### Cài bằng file `.deb` (USB hoặc file local)
 
