@@ -22,11 +22,16 @@ jobs:
       - name: Build Debian package
         run: dpkg-buildpackage -us -uc -b
 
+      - name: Stage Debian package
+        run: |
+          mkdir -p artifacts
+          cp ../tinhmenhdo-ubuntu_*.deb artifacts/
+
       - name: Upload Debian package
         uses: actions/upload-artifact@v4
         with:
           name: tinhmenhdo-deb
-          path: ../tinhmenhdo-ubuntu_*.deb
+          path: artifacts/*.deb
           if-no-files-found: error
 
   publish:
