@@ -40,17 +40,48 @@ Workflow có thể tự publish APT repository lên GitHub Pages. Để bật b�
 
 Không dùng key cá nhân; hãy tạo một signing key riêng cho repository. Nếu chưa bật `PUBLISH_APT=true` hoặc chưa tạo hai secret này, workflow vẫn build `.deb` nhưng bước publish Pages sẽ không chạy.
 
-Sau khi workflow publish thành công và GitHub Pages đã bật chế độ **GitHub Actions**, trên máy Ubuntu mới chạy:
+Sau khi workflow publish thành công và GitHub Pages đã bật chế độ **GitHub Actions**, URL repository là:
+
+```text
+https://voidthrum.github.io/tinhmenhdo-ubuntu/
+```
+
+Trước khi cài, kiểm tra nhanh endpoint:
+
+```sh
+curl --fail --silent --show-error --head \
+  https://voidthrum.github.io/tinhmenhdo-ubuntu/install-tinhmenhdo.sh
+curl --fail --silent --show-error --head \
+  https://voidthrum.github.io/tinhmenhdo-ubuntu/public.key
+```
+
+Nếu cả hai trả HTTP `200`, trên máy Ubuntu mới chạy:
 
 ```sh
 curl --fail --silent --show-error --location \
-  https://<github-user>.github.io/tinhmenhdo-ubuntu/install-tinhmenhdo.sh \
+  https://voidthrum.github.io/tinhmenhdo-ubuntu/install-tinhmenhdo.sh \
   -o /tmp/install-tinhmenhdo.sh
 chmod 700 /tmp/install-tinhmenhdo.sh
 sudo /tmp/install-tinhmenhdo.sh
 ```
 
-Script kiểm tra Ubuntu codename, xác minh fingerprint key, cài keyring, thêm APT source có `Signed-By`, chạy `apt-get update`, rồi cài metapackage. Workflow hiện publish metadata cho Ubuntu 24.04 `noble`; cần thêm job build/test riêng trước khi tuyên bố hỗ trợ codename khác.
+Script kiểm tra Ubuntu codename, xác minh fingerprint key, cài keyring, thêm APT source có `Signed-By`, chạy `apt-get update`, rồi cài metapackage. Workflow hiện publish metadata cho Ubuntu 24.04 `noble`; không chạy trên `jammy` hoặc release khác cho đến khi có metadata tương ứng.
+
+Installer sẽ khiến APT gỡ các package xung đột sau đây nếu chúng đang có mặt:
+
+- `snapd`, `snapd-desktop-integration`, `gnome-software-plugin-snap`
+- `gnome-shell-extension-ubuntu-dock`
+- các package `yaru-theme-*` được khai báo trong metapackage
+
+Đây là thay đổi có chủ ý nhưng có thể làm mất Ubuntu Dock, Yaru theme và các package phụ thuộc trực tiếp vào chúng. Không thử trên máy production nếu chưa có backup hoặc cách khôi phục.
+
+Nếu đã tải file `.deb` và muốn xem APT sẽ gỡ/cài gì trước, chạy mô phỏng:
+
+```sh
+sudo apt-get -s install ./tinhmenhdo-ubuntu_1.0.0_all.deb
+```
+
+Mô phỏng không chạy `postinst`; nó chỉ giúp kiểm tra dependency và các package bị thay đổi.
 
 Nếu chỉ muốn dùng file build mà chưa bật Pages, tải artifact `tinhmenhdo-deb` từ tab **Actions** rồi cài local:
 
@@ -79,6 +110,20 @@ Kiểm tra các thành phần Ubuntu đã bị loại:
 dpkg-query -W -f='${db:Status-Status}\n' \
   gnome-shell-extension-ubuntu-dock yaru-theme-gnome-shell \
   yaru-theme-gtk yaru-theme-icon yaru-theme-sound 2>/dev/null || true
+```
+
+Gỡ profile:
+
+```sh
+sudo apt remove tinhmenhdo-ubuntu
+sudo apt autoremove --purge
+```
+
+Việc gỡ profile không tự cài lại Snap, Ubuntu Dock hoặc Yaru. Nếu muốn khôi phục chúng, cài lại rõ ràng sau khi kiểm tra danh sách package:
+
+```sh
+sudo apt install snapd gnome-shell-extension-ubuntu-dock \
+  yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-icon yaru-theme-sound
 ```
 
 ## Firefox dạng deb
