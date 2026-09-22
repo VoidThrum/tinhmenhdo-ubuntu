@@ -8,13 +8,15 @@ Rules-Requires-Root: no
 
 Package: tinhmenhdo-ubuntu
 Architecture: all
-Depends: ${misc:Depends}, vanilla-gnome-desktop, gnome-session, gnome-software, gnome-software-plugin-flatpak, flatpak
-Conflicts: snapd, snapd-desktop-integration, gnome-software-plugin-snap
-Breaks: snapd, snapd-desktop-integration, gnome-software-plugin-snap
+Depends: ${misc:Depends}, vanilla-gnome-desktop, gnome-session, gnome-software, gnome-software-plugin-flatpak, flatpak, adwaita-icon-theme, gnome-themes-extra
+Conflicts: snapd, snapd-desktop-integration, gnome-software-plugin-snap, gnome-shell-extension-ubuntu-dock, yaru-theme-gnome-shell, yaru-theme-gtk, yaru-theme-icon, yaru-theme-sound, yaru-theme-unity
+Breaks: snapd, snapd-desktop-integration, gnome-software-plugin-snap, gnome-shell-extension-ubuntu-dock, yaru-theme-gnome-shell, yaru-theme-gtk, yaru-theme-icon, yaru-theme-sound, yaru-theme-unity
 Description: TinhMenhDo Ubuntu vanilla GNOME and Flatpak metapackage
  TinhMenhDo Ubuntu configures an Ubuntu desktop around the vanilla GNOME
- desktop packages, GNOME Software and Flatpak. It conflicts with snapd so
- APT cannot keep snapd installed alongside this profile.
+ desktop packages, GNOME Software and Flatpak. It conflicts with Snap, the
+ Ubuntu Dock extension and Yaru theme packages so APT cannot keep them
+ installed alongside this profile. Adwaita is installed as the neutral GNOME
+ theme/icon fallback.
  .
  This package deliberately does not purge user data, call apt recursively,
  add third-party repositories, or install a browser from a PPA.

@@ -1,6 +1,6 @@
 # TinhMenhDo Ubuntu
 
-Metapackage cho Ubuntu Desktop, hướng tới GNOME gần vanilla với GNOME Software, Flatpak/Flathub và không cài lại `snapd`.
+Metapackage cho Ubuntu Desktop, hướng tới GNOME gần vanilla với GNOME Software, Flatpak/Flathub và không cài lại `snapd`, Ubuntu Dock hoặc Yaru theme.
 
 ## Trạng thái hiện tại
 
@@ -10,10 +10,10 @@ Không commit private key, thư mục `~/.gnupg` hoặc thư mục `public/` ch�
 
 ## Vì sao không dùng bản nháp cũ nguyên xi?
 
-- `Conflicts` chỉ làm APT không cho các gói Snap chính tồn tại đồng thời; nó không phải cơ chế purge mọi dữ liệu Snap.
+- `Conflicts` chỉ làm APT không cho các gói Snap, Ubuntu Dock và Yaru theme tồn tại đồng thời; nó không phải cơ chế purge mọi dữ liệu cũ.
 - Maintainer script không được gọi `apt`, không được tự xóa `/var/lib/snapd`, `/usr/lib/snapd` hoặc thư mục người dùng. Những việc đó dễ làm hỏng trạng thái dpkg và dữ liệu người dùng.
 - Không thêm PPA trong `postinst`. PPA là nguồn bên ngoài, cần được người quản trị chấp thuận và bootstrap riêng.
-- `vanilla-gnome-desktop` đã kéo các thành phần GNOME cần thiết qua dependency/recommendation; gói này khai báo thêm các thành phần quan trọng để việc cài đặt không phụ thuộc vào cấu hình `APT::Install-Recommends`.
+- `vanilla-gnome-desktop` đã kéo các thành phần GNOME cần thiết qua dependency/recommendation; gói này khai báo thêm Adwaita và các thành phần quan trọng để việc cài đặt không phụ thuộc vào cấu hình `APT::Install-Recommends`.
 
 ## Build
 
@@ -66,11 +66,19 @@ Chép file `.deb` đã build sang máy mới, rồi chạy:
 sudo apt install ./tinhmenhdo-ubuntu_1.0.0_all.deb
 ```
 
-APT sẽ giải quyết xung đột với `snapd`; các dependency chưa có trên máy vẫn cần nguồn APT hoạt động. Gói không purge dữ liệu Snap cũ. Nếu muốn dọn dữ liệu sau khi đã xác nhận không còn cần rollback:
+APT sẽ giải quyết xung đột với `snapd`, Ubuntu Dock và Yaru theme; các dependency chưa có trên máy vẫn cần nguồn APT hoạt động. Gói không purge dữ liệu Snap cũ. Theme mặc định của từng user có thể cần đăng xuất/đăng nhập hoặc chọn Adwaita trong GNOME Tweaks. Nếu muốn dọn dữ liệu Snap sau khi đã xác nhận không còn cần rollback:
 
 ```sh
 sudo apt purge snapd
 sudo apt autoremove --purge
+```
+
+Kiểm tra các thành phần Ubuntu đã bị loại:
+
+```sh
+dpkg-query -W -f='${db:Status-Status}\n' \
+  gnome-shell-extension-ubuntu-dock yaru-theme-gnome-shell \
+  yaru-theme-gtk yaru-theme-icon yaru-theme-sound 2>/dev/null || true
 ```
 
 ## Firefox dạng deb
