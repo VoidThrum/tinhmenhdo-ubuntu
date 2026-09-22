@@ -20,8 +20,21 @@ case "$REPO_KEY_URL" in
     *) echo "REPO_KEY_URL must use HTTPS" >&2; exit 1 ;;
 esac
 
-if [ "$REPO_URL" = "https://YOUR-USER.github.io/tinhmenhdo-ubuntu" ] \
-    || [ "$REPO_KEY_FINGERPRINT" = REPLACE_WITH_REPO_KEY_FINGERPRINT ]; then
+case "$REPO_URL" in
+    *YOUR-USER*)
+        echo "Set the real repository URL before publishing" >&2
+        exit 1
+        ;;
+esac
+
+case "$REPO_KEY_FINGERPRINT" in
+    *REPLACE_WITH*)
+        echo "Set the real repository GPG fingerprint before publishing" >&2
+        exit 1
+        ;;
+esac
+
+if [ "$REPO_URL" = "" ] || [ "$REPO_KEY_FINGERPRINT" = "" ]; then
     echo "Set the real repository URL and GPG fingerprint before publishing" >&2
     exit 1
 fi

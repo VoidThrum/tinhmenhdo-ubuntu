@@ -81,6 +81,10 @@ jobs:
             -e "s|https://YOUR-USER.github.io/tinhmenhdo-ubuntu|$repo_url|" \
             -e "s|REPLACE_WITH_REPO_KEY_FINGERPRINT|$APT_GPG_KEY_ID|" \
             public/install-tinhmenhdo.sh
+          if grep -Eq 'YOUR-USER\.github\.io|REPLACE_WITH_REPO_KEY_FINGERPRINT' public/install-tinhmenhdo.sh; then
+            echo 'Published installer still contains a placeholder' >&2
+            exit 1
+          fi
           cat > public/index.html <<'EOF'
           <!doctype html>
           <html lang="en">
