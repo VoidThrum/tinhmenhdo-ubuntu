@@ -81,6 +81,17 @@ jobs:
             -e "s|https://YOUR-USER.github.io/tinhmenhdo-ubuntu|$repo_url|" \
             -e "s|REPLACE_WITH_REPO_KEY_FINGERPRINT|$APT_GPG_KEY_ID|" \
             public/install-tinhmenhdo.sh
+          cat > public/index.html <<'EOF'
+          <!doctype html>
+          <html lang="en">
+          <meta charset="utf-8">
+          <title>TinhMenhDo Ubuntu Repository</title>
+          <h1>TinhMenhDo Ubuntu Repository</h1>
+          <p>APT repository for the TinhMenhDo Ubuntu vanilla GNOME profile.</p>
+          <p><a href="install-tinhmenhdo.sh">Download the installer</a></p>
+          <p><a href="public.key">Download the repository public key</a></p>
+          </html>
+          EOF
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
