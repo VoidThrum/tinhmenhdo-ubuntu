@@ -73,8 +73,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release download --repo rustdesk/rustdesk \
-            --pattern 'rustdesk-*_x86_64.deb' \
-            --pattern 'rustdesk-*_aarch64.deb' \
+            --pattern 'rustdesk-*-x86_64.deb' \
+            --pattern 'rustdesk-*-aarch64.deb' \
             --dir artifacts --clobber
 
       - name: Upload Debian package
