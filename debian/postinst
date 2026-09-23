@@ -106,4 +106,13 @@ $(getent passwd)
 EOF
 fi
 
+# Enable installed system daemons without attempting account/authentication
+# setup. These commands are safe to repeat and harmless in non-systemd builds.
+if command -v systemctl >/dev/null 2>&1; then
+    systemctl enable tailscaled.service >/dev/null 2>&1 || true
+    systemctl start tailscaled.service >/dev/null 2>&1 || true
+    systemctl enable rustdesk.service >/dev/null 2>&1 || true
+    systemctl start rustdesk.service >/dev/null 2>&1 || true
+fi
+
 exit 0

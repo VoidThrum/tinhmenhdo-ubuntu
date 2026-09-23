@@ -35,6 +35,37 @@ jobs:
           gh release download --repo collyn/skey --pattern 'fcitx5-skey_*_amd64.deb' \
             --dir artifacts --clobber
 
+      - name: Download Google Chrome package
+        run: |
+          curl --fail --silent --show-error --location \
+            https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+            --output artifacts/google-chrome-stable_current_amd64.deb
+
+      - name: Add Tailscale package source
+        run: |
+          sudo install -d -m 0755 /usr/share/keyrings
+          curl --fail --silent --show-error --location \
+            https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg \
+            | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
+          curl --fail --silent --show-error --location \
+            https://pkgs.tailscale.com/stable/ubuntu/noble.tailscale-keyring.list \
+            | sudo tee /etc/apt/sources.list.d/tailscale.list >/dev/null
+          sudo dpkg --add-architecture arm64
+          sudo apt-get update
+
+      - name: Download Tailscale packages
+        working-directory: artifacts
+        run: apt-get download tailscale:amd64 tailscale:arm64
+
+      - name: Download RustDesk packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download --repo rustdesk/rustdesk \
+            --pattern 'rustdesk-*_x86_64.deb' \
+            --pattern 'rustdesk-*_aarch64.deb' \
+            --dir artifacts --clobber
+
       - name: Upload Debian package
         uses: actions/upload-artifact@v4
         with:
