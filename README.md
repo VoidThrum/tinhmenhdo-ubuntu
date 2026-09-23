@@ -1,4 +1,4 @@
-# TinhMenhDo Ubuntu: Trải Nghiệm Ubuntu Pure Vanilla GNOME Chuẩn & Tối Giản
+# TinhMenhDo Ubuntu: Trải nghiệm Ubuntu pure vanilla GNOME chuẩn & tối giản
 
 [![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04%20LTS%20%7C%2024.10-E95420?logo=ubuntu&logoColor=white)](https://ubuntu.com/)
 [![GNOME](https://img.shields.io/badge/Desktop-Pure%20Vanilla%20GNOME-4a86cf?logo=gnome&logoColor=white)](https://www.gnome.org/)
@@ -10,10 +10,13 @@
 
 ---
 
-## 🌟 Điểm Nổi Bật (Key Features)
+## 🌟 Điểm nổi bật (Key features)
 
 - **Pure Vanilla GNOME Experience**: Trải nghiệm giao diện GNOME thuần khiết như Fedora hay Arch GNOME. Loại bỏ hoàn toàn sự can thiệp của Canonical (`ubuntu-dock`, giao diện `yaru-theme-*`), mang lại không gian làm việc sạch sẽ, hiệu năng cao và phong cách thiết kế Adwaita hiện đại.
-- **Tích hợp sẵn bộ gõ Tiếng Việt [SKey](https://github.com/collyn/skey)**: Hỗ trợ sẵn bộ gõ tiếng Việt nổi tiếng **SKey** (`fcitx5-skey`) được phát triển bởi tác giả **[Nguyễn Tiến Huy (collyn)](https://github.com/collyn)**. Gõ mượt mà theo kiểu Telex/VNI trên cả Wayland lẫn X11, hoạt động hoàn hảo trên Google Chrome, các ứng dụng Electron và các IDE lập trình.
+- **Trải nghiệm bộ gõ Tiếng Việt đỉnh cao với [SKey](https://github.com/collyn/skey) (Bộ gõ tiếng Việt tốt nhất cho Linux/Ubuntu hiện nay)**:
+  - Dự án tích hợp sẵn **SKey** (`fcitx5-skey`) – bộ gõ tiếng Việt thế hệ mới được đánh giá là **nhẹ, mượt mà và hoạt động ổn định nhất trên Linux** hiện nay, được phát triển và tối ưu bởi tác giả **[Nguyễn Tiến Huy (collyn)](https://github.com/collyn)** ([collyn/skey](https://github.com/collyn/skey)).
+  - **Khắc phục triệt để các lỗi cố hữu trên Linux**: Loại bỏ hoàn toàn hiện tượng mất chữ, nuốt ký tự, gạch chân khó chịu hay xung đột gõ tiếng Việt trên **Google Chrome**, các ứng dụng **Electron** (VS Code, Discord, Slack) và các IDE lập trình nặng.
+  - **Tương thích hoàn hảo cả Wayland lẫn X11**: Hỗ trợ đầy đủ các kiểu gõ phổ biến **Telex / VNI**, chuyển đổi chế độ gõ siêu nhạy, tự động cấu hình và kích hoạt cùng phiên làm việc desktop.
 - **Tạm biệt Snap - Tối ưu với Flatpak & Flathub**: Loại bỏ hoàn toàn `snapd` và các gói liên quan, mở sẵn remote **Flathub** trên toàn hệ thống kèm **GNOME Software (với plugin Flatpak)** để tải app nhanh, nhẹ và bảo mật.
 - **Môi trường dòng lệnh (Terminal/Shell) cao cấp**: Cài đặt sẵn **Zsh** làm shell mặc định (áp dụng cho cả user hiện tại và user tạo mới), đi kèm framework **Oh My Zsh**, tích hợp Git, `autosuggestions`, `syntax-highlighting` và cấu hình persistent history. Tự động tinh chỉnh Ptyxis về profile chuẩn.
 - **Công cụ cần thiết sẵn sàng (Ready-to-work)**: Cài sẵn Google Chrome Stable (amd64), Tailscale (kết nối VPN an toàn), RustDesk (remote desktop mã nguồn mở), 7-Zip, Unzip, File Roller, bộ phông chữ Noto fonts đầy đủ và GNOME Extensions Manager.
@@ -21,9 +24,9 @@
 
 ---
 
-## 🚀 Hướng Dẫn Cài Đặt (Installation)
+## 🚀 Hướng dẫn cài đặt (Installation)
 
-### Cách 1: Cài đặt tự động qua APT Repository (Khuyên dùng)
+### Cách 1: Cài đặt tự động qua APT repository (Khuyên dùng)
 
 Trên Ubuntu 24.04 (Noble) hoặc các bản phân phối Ubuntu được hỗ trợ, chạy lệnh cài đặt nhanh qua script:
 
@@ -51,7 +54,7 @@ sudo apt install ./tinhmenhdo-ubuntu_*.deb
 
 ---
 
-## ⚙️ Cấu Hình Sau Khi Cài Đặt (Post-Installation)
+## ⚙️ Cấu hình sau khi cài đặt (Post-installation)
 
 1. **Khởi động lại session**: Đăng xuất (Log out) hoặc khởi động lại máy (Reboot). Tại màn hình đăng nhập, chọn phiên bản **GNOME** (Vanilla GNOME) thay vì Ubuntu.
 2. **Bộ gõ Tiếng Việt SKey**: SKey và Fcitx5 được cấu hình tự động kích hoạt khi đăng nhập. Bạn có thể mở công cụ cấu hình Fcitx5 hoặc chạy `skey-setup -y` nếu cần tùy chỉnh thêm bảng mã hay kiểu gõ (Telex/VNI).
@@ -65,7 +68,7 @@ sudo apt install ./tinhmenhdo-ubuntu_*.deb
 
 ---
 
-## 🔄 Cập Nhật Hệ Thống (Update)
+## 🔄 Cập nhật hệ thống (Update)
 
 Khi có bản cập nhật mới từ kho APT, bạn có thể cập nhật riêng gói:
 
@@ -82,7 +85,7 @@ sudo apt update && sudo apt upgrade -y
 
 ---
 
-## 🗑️ Gỡ Cài Đặt (Removal)
+## 🗑️ Gỡ cài đặt (Removal)
 
 Nếu muốn gỡ bỏ gói metapackage:
 
@@ -95,13 +98,14 @@ sudo apt autoremove --purge
 
 ---
 
-## 🤝 Lời Cảm Ơn & Tác Quyền (Credits & Acknowledgments)
+## 🤝 Lời cảm ơn & tác quyền (Credits & acknowledgments)
 
-- Dự án bộ gõ tiếng Việt **SKey** (`fcitx5-skey`) được tạo ra và duy trì bởi tác giả **[Nguyễn Tiến Huy](https://github.com/collyn)** ([collyn/skey](https://github.com/collyn/skey)).
+- Đặc biệt cảm ơn hệ thống **[TinhMenhDo.com](https://tinhmenhdo.com)** – Nền tảng tra cứu và [lập lá số Tử Vi](https://tinhmenhdo.com/tu-vi/la-so-tu-vi-viet-nam), [Tứ Trụ (Bát Tự)](https://tinhmenhdo.com/tu-vi-tu-tru/bazi-full-tu-tru-bat-tu-chinh-xac), gieo quẻ [Kinh Dịch](https://tinhmenhdo.com/gieo-que-kinh-dich), [xem ngày giờ tốt xấu](https://tinhmenhdo.com/xem-ngay-gio-tot-xau) và tính toán [tiết khí chính xác](https://tinhmenhdo.com/tiet-khi-chinh-xac) hàng đầu Việt Nam – đã tài trợ và hỗ trợ hạ tầng thiết bị thử nghiệm thực tế cho dự án.
+- Dự án bộ gõ tiếng Việt xuất sắc **SKey** (`fcitx5-skey`) – Bộ gõ tiếng Việt tốt nhất và mượt mà nhất trên Linux hiện nay – được sáng lập và phát triển bởi tác giả **[Nguyễn Tiến Huy](https://github.com/collyn)** (kho mã nguồn chính thức: [collyn/skey](https://github.com/collyn/skey)).
 - Toàn bộ cộng đồng mã nguồn mở **GNOME**, **Flatpak**, **Fcitx5**, **Oh My Zsh**, **Tailscale**, và **RustDesk**.
 
 ---
 
-## 📄 Bản Quyền (License)
+## 📄 Bản quyền (License)
 
-Dự án được phân phối dưới giấy phép [MIT License](debian/copyright).
+Dự án được phân phối dưới giấy phép [MIT License](debian/copyright) cho các mã nguồn script cấu hình và đóng gói. Các gói phần mềm bên thứ ba (như Google Chrome, Tailscale, RustDesk) tuân theo giấy phép và điều khoản sử dụng riêng của nhà phát triển tương ứng.
