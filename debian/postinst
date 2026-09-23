@@ -23,11 +23,32 @@ if [ "$1" = configure ] && command -v zsh >/dev/null 2>&1; then
         fi
     fi
 
+    reset_ptyxis() {
+        user=$1
+        home=$2
+        group=$3
+        command -v dconf >/dev/null 2>&1 || return 0
+        marker="$home/.config/tinhmenhdo-ubuntu/ptyxis-reset"
+        [ -e "$marker" ] && return 0
+
+        # Ptyxis stores profiles and palettes in dconf. Reset only once on
+        # first installation; later package updates must keep user choices.
+        if runuser -u "$user" -- env HOME="$home" \
+            XDG_CONFIG_HOME="$home/.config" dconf reset -f /org/gnome/Ptyxis/ \
+            >/dev/null 2>&1; then
+            install -d -o "$user" -g "$group" -m 0755 \
+                "$home/.config/tinhmenhdo-ubuntu" || true
+            install -o "$user" -g "$group" -m 0644 /dev/null "$marker" || true
+        fi
+    }
+
     configure_user() {
         user=$1
         home=$2
         group=$(id -gn "$user" 2>/dev/null || true)
         [ -n "$group" ] || return 0
+
+        reset_ptyxis "$user" "$home" "$group" || true
 
         # Never replace a user's existing configuration.
         if [ ! -e "$home/.zshrc" ]; then
@@ -55,6 +76,14 @@ if [ "$1" = configure ] && command -v zsh >/dev/null 2>&1; then
         # usermod is non-interactive and safe to repeat.
         if command -v usermod >/dev/null 2>&1; then
             usermod -s /usr/bin/zsh "$user" >/dev/null 2>&1 || true
+        fi
+
+        # Configure SKey when its optional package is available. The command
+        # is safe to repeat and failure remains retryable on reconfigure.
+        if command -v skey-setup >/dev/null 2>&1; then
+            runuser -u "$user" -- env HOME="$home" \
+                XDG_CONFIG_HOME="$home/.config" skey-setup -y \
+                >/dev/null 2>&1 || true
         fi
     }
 

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Fcitx 5
+Comment=Start the Fcitx 5 input method framework
+Exec=fcitx5 -d
+Terminal=false
+NoDisplay=true
+X-GNOME-Autostart-enabled=true
+X-KDE-autostart-after=panel

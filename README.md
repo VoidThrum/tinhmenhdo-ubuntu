@@ -7,11 +7,16 @@ When installed, the package:
 - installs the vanilla GNOME desktop, GNOME Session, GNOME Software, Flatpak, Adwaita themes, and related dependencies;
 - attempts to enable Flathub as a system-wide Flatpak remote;
 - installs Zsh with Oh My Zsh, Git integration, autosuggestions, syntax highlighting, and persistent history;
+- installs Fcitx5 and starts it automatically with the desktop session;
+- recommends SKey as the Vietnamese Telex/VNI input method on amd64;
 - sets Zsh as the default shell for existing desktop users and future users;
+- resets existing Ptyxis preferences once so it starts with its default profile instead of an Ubuntu-specific palette;
 - prevents Snap, Ubuntu Dock, the GNOME Software Snap plugin, and Yaru theme packages from being installed alongside the profile;
 - keeps the Ubuntu wallpaper package required by Ubuntu's GNOME Shell.
 
 The package does not install a browser, add third-party PPAs, recursively run APT, or delete existing Snap data and user files. Removing the package does not automatically restore components that were removed because of package conflicts.
+
+After installation, close and reopen Ptyxis once so the reset profile is loaded.
 
 ## Installation
 
@@ -27,7 +32,9 @@ chmod 700 /tmp/install-tinhmenhdo.sh
 sudo /tmp/install-tinhmenhdo.sh
 ~~~
 
-The installer verifies the repository key fingerprint, configures the signed APT source, and installs the package. It supports Ubuntu noble and resolute. Review the APT transaction before confirming.
+The installer verifies the repository key fingerprint, configures the signed APT source, and installs the package and its SKey recommendation on amd64. It supports Ubuntu noble and resolute. Review the APT transaction before confirming.
+
+The project repository includes the current amd64 SKey package from [collyn/skey](https://github.com/collyn/skey). Fcitx5 is installed on both amd64 and arm64; SKey is currently published by this project for amd64 only.
 
 ### From a local package file
 

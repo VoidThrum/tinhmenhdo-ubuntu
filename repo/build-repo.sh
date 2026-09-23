@@ -42,7 +42,11 @@ for arch in $ARCHES; do
     # rather than the local staging path (for example ./public/pool/main/...).
     (
         cd "$OUTPUT_DIR"
-        apt-ftparchive packages pool/main > "dists/$CODENAME/main/binary-$arch/Packages"
+        apt-ftparchive packages pool/main \
+            | awk -v target="$arch" '
+                BEGIN { RS = ""; ORS = "\n\n" }
+                $0 ~ "(^|\\n)Architecture: (all|" target ")($|\\n)" { print }
+            ' > "dists/$CODENAME/main/binary-$arch/Packages"
     )
     gzip -n -9 -c "$OUTPUT_DIR/dists/$CODENAME/main/binary-$arch/Packages" > "$OUTPUT_DIR/dists/$CODENAME/main/binary-$arch/Packages.gz"
 done

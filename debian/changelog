@@ -1,3 +1,26 @@
+tinhmenhdo-ubuntu (1.0.6) noble; urgency=medium
+
+  * Add Fcitx5 startup and Vietnamese SKey integration.
+  * Include the amd64 SKey package in CI artifacts and the APT repository.
+  * Filter repository indexes by architecture.
+
+ -- TinhMenhDo Ubuntu maintainers <vuquyettam@gmail.com>  Wed, 23 Sep 2026 19:00:00 +0700
+
+tinhmenhdo-ubuntu (1.0.5) noble; urgency=medium
+
+  * Add Fcitx5, GTK/Qt frontends, and desktop-session autostart.
+  * Integrate the SKey Vietnamese input method package on amd64.
+  * Run skey-setup for existing users when SKey is available.
+
+ -- TinhMenhDo Ubuntu maintainers <vuquyettam@gmail.com>  Wed, 23 Sep 2026 18:30:00 +0700
+
+tinhmenhdo-ubuntu (1.0.4) noble; urgency=medium
+
+  * Reset existing Ptyxis preferences once to remove inherited Ubuntu palettes.
+  * Preserve user-selected Ptyxis settings on later package updates.
+
+ -- TinhMenhDo Ubuntu maintainers <vuquyettam@gmail.com>  Wed, 23 Sep 2026 18:00:00 +0700
+
 tinhmenhdo-ubuntu (1.0.3) noble; urgency=medium
 
   * Make Zsh setup retryable and isolate per-user configuration failures.

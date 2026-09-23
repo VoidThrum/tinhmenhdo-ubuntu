@@ -28,6 +28,13 @@ jobs:
           mkdir -p artifacts
           cp ../tinhmenhdo-ubuntu_*.deb artifacts/
 
+      - name: Download SKey package
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download --repo collyn/skey --pattern 'fcitx5-skey_*_amd64.deb' \
+            --dir artifacts --clobber
+
       - name: Upload Debian package
         uses: actions/upload-artifact@v4
         with:
