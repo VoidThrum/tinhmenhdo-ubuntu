@@ -8,7 +8,7 @@ Rules-Requires-Root: no
 
 Package: tinhmenhdo-ubuntu
 Architecture: all
-Depends: ${misc:Depends}, vanilla-gnome-desktop, gnome-session, gnome-software, gnome-software-plugin-flatpak, flatpak, adwaita-icon-theme, gnome-themes-extra, ubuntu-wallpapers
+Depends: ${misc:Depends}, vanilla-gnome-desktop, gnome-session, gnome-software, gnome-software-plugin-flatpak, flatpak, adwaita-icon-theme, gnome-themes-extra, ubuntu-wallpapers, zsh, zsh-common, git, ca-certificates, zsh-autosuggestions, zsh-syntax-highlighting
 Conflicts: snapd, snapd-desktop-integration, gnome-software-plugin-snap, gnome-shell-extension-ubuntu-dock, yaru-theme-gnome-shell, yaru-theme-gtk, yaru-theme-icon, yaru-theme-sound, yaru-theme-unity
 Breaks: snapd, snapd-desktop-integration, gnome-software-plugin-snap, gnome-shell-extension-ubuntu-dock, yaru-theme-gnome-shell, yaru-theme-gtk, yaru-theme-icon, yaru-theme-sound, yaru-theme-unity
 Description: TinhMenhDo Ubuntu vanilla GNOME and Flatpak metapackage
@@ -20,4 +20,5 @@ Description: TinhMenhDo Ubuntu vanilla GNOME and Flatpak metapackage
  Ubuntu's GNOME Shell package on supported releases and is not a Yaru theme.
  .
  This package deliberately does not purge user data, call apt recursively,
- add third-party repositories, or install a browser from a PPA.
+ add third-party repositories, or install a browser from a PPA. It provides
+ a Zsh setup with Oh My Zsh, common plugins, and persistent history.

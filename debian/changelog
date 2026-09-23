@@ -1,3 +1,17 @@
+tinhmenhdo-ubuntu (1.0.3) noble; urgency=medium
+
+  * Make Zsh setup retryable and isolate per-user configuration failures.
+  * Set Zsh as the default shell for existing and newly created users.
+
+ -- TinhMenhDo Ubuntu maintainers <vuquyettam@gmail.com>  Wed, 23 Sep 2026 17:30:00 +0700
+
+tinhmenhdo-ubuntu (1.0.2) noble; urgency=medium
+
+  * Add Zsh, Oh My Zsh, common Zsh plugins, and persistent history setup.
+  * Set Zsh as the default shell for desktop users during configuration.
+
+ -- TinhMenhDo Ubuntu maintainers <vuquyettam@gmail.com>  Wed, 23 Sep 2026 17:00:00 +0700
+
 tinhmenhdo-ubuntu (1.0.1) noble; urgency=medium
 
   * Keep Ubuntu wallpaper dependency required by GNOME Shell.

@@ -8,4 +8,73 @@ if [ "$1" = configure ] && command -v flatpak >/dev/null 2>&1; then
         https://dl.flathub.org/repo/flathub.flatpakrepo >/dev/null 2>&1 || true
 fi
 
+if [ "$1" = configure ] && command -v zsh >/dev/null 2>&1; then
+    # Make Zsh the default for users created after this package is installed.
+    if command -v useradd >/dev/null 2>&1; then
+        useradd -D -s /usr/bin/zsh >/dev/null 2>&1 || true
+    fi
+    if [ -w /etc/adduser.conf ]; then
+        if grep -q '^DSHELL=' /etc/adduser.conf 2>/dev/null; then
+            sed -i 's|^DSHELL=.*|DSHELL=/usr/bin/zsh|' /etc/adduser.conf || true
+        elif grep -q '^#DSHELL=' /etc/adduser.conf 2>/dev/null; then
+            sed -i 's|^#DSHELL=.*|DSHELL=/usr/bin/zsh|' /etc/adduser.conf || true
+        else
+            printf '%s\n' 'DSHELL=/usr/bin/zsh' >> /etc/adduser.conf || true
+        fi
+    fi
+
+    configure_user() {
+        user=$1
+        home=$2
+        group=$(id -gn "$user" 2>/dev/null || true)
+        [ -n "$group" ] || return 0
+
+        # Never replace a user's existing configuration.
+        if [ ! -e "$home/.zshrc" ]; then
+            install -o "$user" -g "$group" -m 0644 \
+                /usr/share/tinhmenhdo-ubuntu/zshrc "$home/.zshrc" || true
+        fi
+
+        # A failed network clone is deliberately retryable on the next
+        # package configuration. It must never leave dpkg half-configured.
+        if [ ! -r "$home/.oh-my-zsh/oh-my-zsh.sh" ] && command -v git >/dev/null 2>&1; then
+            tmp_omz=$(runuser -u "$user" -- mktemp -d \
+                "$home/.oh-my-zsh.XXXXXX" 2>/dev/null || true)
+            if [ -n "$tmp_omz" ]; then
+                if runuser -u "$user" -- git clone --depth=1 --quiet \
+                    https://github.com/ohmyzsh/ohmyzsh.git "$tmp_omz/repo" \
+                    >/dev/null 2>&1; then
+                    if [ ! -e "$home/.oh-my-zsh" ]; then
+                        mv "$tmp_omz/repo" "$home/.oh-my-zsh" || true
+                    fi
+                fi
+                rm -rf "$tmp_omz" || true
+            fi
+        fi
+
+        # usermod is non-interactive and safe to repeat.
+        if command -v usermod >/dev/null 2>&1; then
+            usermod -s /usr/bin/zsh "$user" >/dev/null 2>&1 || true
+        fi
+    }
+
+    # Configure desktop users without replacing an existing .zshrc. A failure
+    # for one user is isolated so later users and future dpkg retries proceed.
+    while IFS=: read -r user _ uid _ _ home shell; do
+        case "$uid" in
+            ''|*[!0-9]*) continue ;;
+        esac
+        [ "$uid" -ge 1000 ] 2>/dev/null || continue
+        [ "$uid" -lt 60000 ] 2>/dev/null || continue
+        [ -d "$home" ] || continue
+        [ "$home" != /nonexistent ] || continue
+        case "$shell" in
+            */false|*/nologin) continue ;;
+        esac
+        configure_user "$user" "$home" || true
+    done <<EOF
+$(getent passwd)
+EOF
+fi
+
 exit 0
