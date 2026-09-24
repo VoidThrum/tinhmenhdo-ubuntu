@@ -52,13 +52,20 @@ if [ "$1" = configure ] && command -v zsh >/dev/null 2>&1; then
 
         # Preserve an existing configuration, but make sure it loads the
         # package configuration so history and the packaged Zsh plugins work.
+        pkg_zshrc=/usr/share/tinhmenhdo-ubuntu/tinhmenhdo.zshrc
+        if [ ! -f "$pkg_zshrc" ] && [ -f /usr/share/tinhmenhdo-ubuntu/zshrc ]; then
+            pkg_zshrc=/usr/share/tinhmenhdo-ubuntu/zshrc
+        fi
+
         if [ ! -e "$home/.zshrc" ]; then
             install -o "$user" -g "$group" -m 0644 \
-                /usr/share/tinhmenhdo-ubuntu/zshrc "$home/.zshrc" || true
-        elif ! grep -Fq '# >>> tinhmenhdo-ubuntu zsh configuration >>>' "$home/.zshrc" 2>/dev/null; then
+                "$pkg_zshrc" "$home/.zshrc" || true
+        else
+            # Strip previous faulty marker blocks if any existed
+            sed -i '/# >>> tinhmenhdo-ubuntu zsh configuration >>>/,/# <<< tinhmenhdo-ubuntu zsh configuration <<</d' "$home/.zshrc" 2>/dev/null || true
             {
                 printf '\n%s\n' '# >>> tinhmenhdo-ubuntu zsh configuration >>>'
-                printf '%s\n' '[ -r /usr/share/tinhmenhdo-ubuntu/zshrc ] && . /usr/share/tinhmenhdo-ubuntu/zshrc'
+                printf '%s\n' "[ -r $pkg_zshrc ] && . $pkg_zshrc"
                 printf '%s\n' '# <<< tinhmenhdo-ubuntu zsh configuration <<<'
             } >> "$home/.zshrc" || true
         fi

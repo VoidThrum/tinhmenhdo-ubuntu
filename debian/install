@@ -1,4 +1,3 @@
 debian/tinhmenhdo-ubuntu.pref etc/apt/preferences.d/
-debian/tinhmenhdo.zshrc etc/skel/.zshrc
-debian/tinhmenhdo.zshrc usr/share/tinhmenhdo-ubuntu/zshrc
+debian/tinhmenhdo.zshrc usr/share/tinhmenhdo-ubuntu/
 debian/tinhmenhdo-fcitx5.desktop etc/xdg/autostart/
