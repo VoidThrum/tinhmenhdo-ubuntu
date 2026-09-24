@@ -112,4 +112,17 @@ install -m 0644 "$tmp_source" "$REPO_SOURCE"
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --yes tinhmenhdo-ubuntu
 
+# Automatically run skey-setup for the user who invoked sudo or desktop users
+if command -v skey-setup >/dev/null 2>&1; then
+    target_user="${SUDO_USER:-}"
+    if [ -n "$target_user" ] && [ "$target_user" != root ] && id "$target_user" >/dev/null 2>&1; then
+        target_home=$(getent passwd "$target_user" | cut -d: -f6)
+        if [ -d "$target_home" ]; then
+            runuser -u "$target_user" -- env HOME="$target_home" \
+                USER="$target_user" LOGNAME="$target_user" \
+                skey-setup -y >/dev/null 2>&1 || true
+        fi
+    fi
+fi
+
 echo "TinhMenhDo Ubuntu installed for Ubuntu $CODENAME. Log out and select the GNOME session, or reboot."

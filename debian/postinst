@@ -96,8 +96,10 @@ if [ "$1" = configure ] && command -v zsh >/dev/null 2>&1; then
         # is safe to repeat and failure remains retryable on reconfigure.
         if command -v skey-setup >/dev/null 2>&1; then
             runuser -u "$user" -- env HOME="$home" \
-                XDG_CONFIG_HOME="$home/.config" skey-setup -y \
-                >/dev/null 2>&1 || true
+                USER="$user" LOGNAME="$user" \
+                XDG_CONFIG_HOME="$home/.config" \
+                XDG_DATA_HOME="$home/.local/share" \
+                skey-setup -y >/dev/null 2>&1 || true
         fi
     }
 
