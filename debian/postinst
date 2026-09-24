@@ -50,10 +50,17 @@ if [ "$1" = configure ] && command -v zsh >/dev/null 2>&1; then
 
         reset_ptyxis "$user" "$home" "$group" || true
 
-        # Never replace a user's existing configuration.
+        # Preserve an existing configuration, but make sure it loads the
+        # package configuration so history and the packaged Zsh plugins work.
         if [ ! -e "$home/.zshrc" ]; then
             install -o "$user" -g "$group" -m 0644 \
                 /usr/share/tinhmenhdo-ubuntu/zshrc "$home/.zshrc" || true
+        elif ! grep -Fq '# >>> tinhmenhdo-ubuntu zsh configuration >>>' "$home/.zshrc" 2>/dev/null; then
+            {
+                printf '\n%s\n' '# >>> tinhmenhdo-ubuntu zsh configuration >>>'
+                printf '%s\n' '[ -r /usr/share/tinhmenhdo-ubuntu/zshrc ] && . /usr/share/tinhmenhdo-ubuntu/zshrc'
+                printf '%s\n' '# <<< tinhmenhdo-ubuntu zsh configuration <<<'
+            } >> "$home/.zshrc" || true
         fi
 
         # A failed network clone is deliberately retryable on the next
