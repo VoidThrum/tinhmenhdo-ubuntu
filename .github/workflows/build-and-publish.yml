@@ -105,10 +105,26 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" release-assets/* \
-            --repo "$GITHUB_REPOSITORY" \
-            --title "TinhMenhDo Ubuntu $GITHUB_REF_NAME" \
-            --generate-notes
+          # GitHub API occasionally returns transient HTTP 500 during release generation.
+          # Retry up to 3 times, or upload assets to an existing draft/release.
+          for attempt in 1 2 3 4; do
+            echo "Attempt $attempt: creating release for $GITHUB_REF_NAME..."
+            if gh release create "$GITHUB_REF_NAME" release-assets/* \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "TinhMenhDo Ubuntu $GITHUB_REF_NAME" \
+              --generate-notes; then
+              echo "Release created successfully."
+              exit 0
+            elif gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+              echo "Release already exists, uploading release assets..."
+              gh release upload "$GITHUB_REF_NAME" release-assets/* \
+                --repo "$GITHUB_REPOSITORY" --clobber
+              exit 0
+            fi
+            echo "Attempt $attempt failed. Waiting before retry..."
+            sleep 5
+          done
+          exit 1
 
   publish:
     needs: build
