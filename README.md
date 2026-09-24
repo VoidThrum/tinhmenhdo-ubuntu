@@ -85,6 +85,28 @@ sudo apt update && sudo apt upgrade -y
 
 ---
 
+## 🛠️ Troubleshooting & Repair
+
+If you encounter issues where Zsh does not load the Oh My Zsh theme, plugins fail to execute, or user shell dotfiles become corrupted, run a repair reinstall:
+
+```bash
+sudo apt update && sudo apt --reinstall install tinhmenhdo-ubuntu -y
+```
+
+This will trigger the package configuration routines to:
+- Restore package-provided Zsh configurations in `/usr/share/tinhmenhdo-ubuntu/`.
+- Clean up any invalid or broken `.zshrc` blocks and re-link the packaged settings.
+- Ensure `~/.oh-my-zsh` is cloned and present.
+- Re-run `skey-setup -y` for all desktop users.
+
+After running the repair command, apply the changes immediately by opening a new terminal window or running:
+
+```bash
+exec zsh
+```
+
+---
+
 ## 🗑️ Uninstallation
 
 To remove the metapackage:
