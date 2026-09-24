@@ -8,6 +8,23 @@ if [ "$1" = configure ] && command -v flatpak >/dev/null 2>&1; then
         https://dl.flathub.org/repo/flathub.flatpakrepo >/dev/null 2>&1 || true
 fi
 
+if [ "$1" = configure ]; then
+    # Older package versions mistakenly installed /etc/skel/.zshrc as a directory.
+    # Replace it with the correct file if it is still a directory.
+    if [ -d /etc/skel/.zshrc ] && [ ! -L /etc/skel/.zshrc ]; then
+        if [ -f /etc/skel/.zshrc/tinhmenhdo.zshrc ]; then
+            cp -f /etc/skel/.zshrc/tinhmenhdo.zshrc /etc/skel/.zshrc.tmp
+            rm -rf /etc/skel/.zshrc
+            mv -f /etc/skel/.zshrc.tmp /etc/skel/.zshrc
+            chmod 0644 /etc/skel/.zshrc
+        elif [ -f /usr/share/tinhmenhdo-ubuntu/tinhmenhdo.zshrc ]; then
+            rm -rf /etc/skel/.zshrc
+            cp -f /usr/share/tinhmenhdo-ubuntu/tinhmenhdo.zshrc /etc/skel/.zshrc
+            chmod 0644 /etc/skel/.zshrc
+        fi
+    fi
+fi
+
 if [ "$1" = configure ] && command -v zsh >/dev/null 2>&1; then
     # Make Zsh the default for users created after this package is installed.
     if command -v useradd >/dev/null 2>&1; then
