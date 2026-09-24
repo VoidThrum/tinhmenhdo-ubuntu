@@ -1,9 +1,11 @@
-tinhmenhdo-ubuntu (1.0.11) noble; urgency=medium
+tinhmenhdo-ubuntu (1.0.12) noble; urgency=medium
 
   * Fix Zsh configuration installation path in debian/install and debian/rules.
   * Correctly source and clean up Zsh configuration for users with existing .zshrc.
+  * Only publish APT repository to GitHub Pages on main branch pushes.
 
- -- TinhMenhDo Ubuntu maintainers <vuquyettam@gmail.com>  Thu, 24 Sep 2026 21:46:00 +0700
+ -- TinhMenhDo Ubuntu maintainers <vuquyettam@gmail.com>  Thu, 24 Sep 2026 22:02:00 +0700
+
 
 
 

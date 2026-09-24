@@ -112,7 +112,9 @@ jobs:
 
   publish:
     needs: build
-    if: ${{ vars.PUBLISH_APT == 'true' }}
+    # GitHub Pages environments are restricted to the default branch (main).
+    # Tags cannot deploy to github-pages under default environment protection rules.
+    if: ${{ vars.PUBLISH_APT == 'true' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-24.04
     permissions:
       contents: read
